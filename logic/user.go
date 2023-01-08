@@ -34,7 +34,7 @@ type User struct {
 	isNew bool
 }
 
-// 系统用户，代表是系统主动发送的消息
+// 系统用户，代表是系统主動發送的訊息
 var System = &User{}
 
 func NewUser(conn *websocket.Conn, token, nickname, addr string) *User {
@@ -83,7 +83,7 @@ func (u *User) ReceiveMessage(ctx context.Context) error {
 	for {
 		err = wsjson.Read(ctx, u.conn, &receiveMsg)
 		if err != nil {
-			// 判定连接是否关闭了，正常关闭，不认为是错误
+			// 判斷連接是否關閉，若正常關閉，不判斷為錯誤
 			var closeErr websocket.CloseError
 			if errors.As(err, &closeErr) {
 				return nil
@@ -94,7 +94,7 @@ func (u *User) ReceiveMessage(ctx context.Context) error {
 			return err
 		}
 
-		// 内容发送到聊天室
+		// 内容發送到聊天室
 		sendMsg := NewMessage(u, receiveMsg["content"], receiveMsg["send_time"])
 		sendMsg.Content = FilterSensitive(sendMsg.Content)
 

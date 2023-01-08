@@ -1,18 +1,19 @@
 package main
 
-import (
+import(
 	"fmt"
-	"log"
 	"net/http"
+	"log"
 
 	_ "net/http/pprof"
 
-	"github.com/polaris1119/chatroom/global"
-	"github.com/polaris1119/chatroom/server"
+	"chatsystem/server"
+	"chatsystem/global"
+
 )
 
 var (
-	addr   = ":2022"
+	addr   = ":2023"
 	banner = `
     ____              _____
    |    |    |   /\     |
@@ -20,8 +21,7 @@ var (
    |    |    | /----\   |
    |____|    |/      \  |
 
-Go语言编程之旅 —— 一起用Go做项目：ChatRoom，start on：%s
-
+Go 語言學習項目：ChatRoom，start on：%s
 `
 )
 
@@ -30,7 +30,7 @@ func init() {
 }
 
 func main() {
-	fmt.Printf(banner, addr)
+	fmt.Printf(banner+"\n", addr)
 
 	server.RegisterHandle()
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>聊天室 —— Go语言编程之旅</title>
+    <title>聊天室 —— Go語言websocket應用練習</title>
 
     <link href="https://cdn.bootcss.com/twitter-bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -29,7 +29,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="page-header">
-                <h2 class="text-center">欢迎来到《Go 语言编程之旅：一起用 Go 做项目》聊天室</h2>
+                <h2 class="text-center">歡迎來到《Go語言websocket應用練習》聊天室</h2>
             </div>
         </div>
     </div>
@@ -50,10 +50,10 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div>当前在线用户数：<font color="red">${ onlineUserNum }</font></div>
+            <div>在線用戶人數：<font color="red">${ onlineUserNum }</font></div>
             <div class="user-list">
                 <div class="user" v-for="user in users">
-                    用户：@${ user.nickname } 加入时间：${ formatDate(user.enter_at) }
+                    用户：@${ user.nickname } 加入聊天室時間：${ formatDate(user.enter_at) }
                 </div>
             </div>
         </div>
@@ -65,18 +65,18 @@
                 <div class="usertip text-center">${ usertip }</div>
                 <div class="form-inline has-success text-center" style="margin-bottom: 10px;">
                     <div class="input-group">
-                        <span class="input-group-addon">您的昵称</span>
+                        <span class="input-group-addon">個人暱稱</span>
                         <input type="text" v-model="curUser.nickname" v-bind:disabled="joined" class="form-control" aria-describedby="inputGroupSuccess1Status">
                     </div>
-                    <input type="submit" class="form-control btn-primary text-center" v-on:click="leavechat" v-if="joined" value="离开聊天室">
-                    <input type="submit" class="form-control btn-primary text-center" v-on:click="joinchat" v-else="joined" value="进入聊天室">
+                    <input type="submit" class="form-control btn-primary text-center" v-on:click="leavechat" v-if="joined" value="離開聊天室">
+                    <input type="submit" class="form-control btn-primary text-center" v-on:click="joinchat" v-else="joined" value="進入聊天室">
                 </div>
                 <textarea id="chat-content" rows="3" class="form-control" v-model="content"
                           @keydown.enter.prevent.exact="sendChatContent"
                           @keydown.meta.enter="lineFeed"
                           @keydown.ctrl.enter="lineFeed"
-                          placeholder="在此收入聊天内容。ctrl/command+enter 换行，enter 发送"></textarea>&nbsp;
-                <input type="button" value="发送(Enter)" class="btn-primary form-control" v-on:click="sendChatContent">
+                          placeholder="在此輸入聊天内容。ctrl/command+enter 換行，enter 送出"></textarea>&nbsp;
+                <input type="button" value="送出(Enter)" class="btn-primary form-control" v-on:click="sendChatContent">
             </div>
         </div>
     </div>
@@ -96,9 +96,9 @@
                 nickname: '',
                 token: '',
             },
-            usertip: "当前还未进入聊天室，请在下方「填上您的昵称」",
+            usertip: "若要進入聊天室，請在下方「填上個人暱稱」",
 
-            // 是否已经加入聊天室
+            // 是否已經加入聊天室
             joined: false,
 
             users: [],
@@ -123,7 +123,7 @@
                 let that = this;
 
                 if (this.curUser.nickname == "") {
-                    this.usertip = "昵称不能为空";
+                    this.usertip = "個人暱稱不能為空";
                     return;
                 }
 
@@ -132,11 +132,11 @@
 
                 if ("WebSocket" in window) {
                     let host = location.host;
-                    // 打开一个 websocket 连接
+                    // 打開一個 websocket 連線
                     gWS = new WebSocket("ws://"+host+"/ws?nickname="+this.curUser.nickname+"&token="+this.curUser.token);
 
                     gWS.onopen = function () {
-                        // WebSocket 已连接上的回调
+                        // WebSocket 已連上的callback
                     };
 
                     gWS.onmessage = function (evt) {
@@ -146,7 +146,7 @@
                             that.joined = false;
                             return;
                         } else if (data.type == 1) {
-                            // 欢迎消息
+                            // 歡迎訊息
                             that.curUser = data.user;
                             localStorage.setItem('user', JSON.stringify(data.user));
                             
@@ -154,13 +154,13 @@
                             
                             that.fetchUserList();
                         } else if (data.type == 2) {
-                            // 某个用户进入
+                            // 某個用戶進入
                             let user = data.user;
                             let len = that.users.length;
                             that.users.push(user);
                             that.indexMap[user.nickname] = len;
                         } else if (data.type == 3) {
-                            // 某个用户退出
+                            // 某個用戶退出
                             let nickname = data.user.nickname;
                             let idx = that.indexMap[nickname];
 
@@ -176,16 +176,16 @@
                     };
 
                     gWS.onerror = function(evt) {
-                        console.log("发生错误：");
+                        console.log("發生異常:");
                         console.log(evt);
                     };
 
                     gWS.onclose = function () {
-                        console.log("连接已关闭")
+                        console.log("連線已關閉")
                     };
 
                 } else {
-                    alert("您的浏览器不支持 WebSocket!");
+                    alert("當前瀏覽器不支援 WebSocket!");
                 }
             },
             leavechat: function() {
@@ -196,7 +196,7 @@
                 this.addMsg2List({
                     user: {nickname: ""},
                     type: 1,
-                    content: '您已离开聊天室，再见！',
+                    content: '已離開聊天室',
                 });
 
                 this.users.splice(0);
@@ -222,17 +222,17 @@
             },
             fetchUserList: function() {
                 let that = this;
-                // XMLHttpRequest对象用于在后台与服务器交换数据
+                // XMLHttpRequest對象用於在後台與server交換數據
                 var xhr = new XMLHttpRequest();
-                //每当readyState改变时就会触发onreadystatechange函数
-                //0: 请求未初始化
-                //1: 服务器连接已建立
-                //2: 请求已接收
-                //3: 请求处理中
-                //4: 请求已完成，且响应已就绪
+                //每當readyState改變實就會觸發onreadystatechange
+                //0: 請求未初始化
+                //1: server連線已建立
+                //2: 請求已接收
+                //3: 請求處理中
+                //4: 請求已完成，且響應已就绪
                 xhr.open('GET', '/user_list', true)
                 xhr.onreadystatechange = function () {
-                    //readyStatus == 4说明请求已经完成
+                    //readyStatus == 4說明請求已經完成
                     if(xhr.readyState == 4 && xhr.status ==200) {
                         that.users.splice(0);
                         let users = JSON.parse(xhr.responseText);
@@ -243,10 +243,10 @@
                         }
                     }
                 };
-                //发送数据
+                //發送數據
                 xhr.send();
             },
-            // 换行
+            // 換行
             lineFeed: function(evt) {
                 this.content = this.content + '\n';
             },
@@ -265,7 +265,7 @@
                 }
 
                 let elaspe = msg.receive_time.getTime() - send.getTime();
-                return "耗时 " + elaspe + "ms";
+                return "花費時間 " + elaspe + "ms";
             },
 
             addMsg2List: function(data) {
@@ -302,7 +302,7 @@
 
             // 保活
             keepAlive: function() {
-                // 表明异常退出了
+                // 表明異常退出了
                 if (gWS.readyState == WebSocket.CLOSED && this.joined) {
                     console.log("reconnect");
                     this.joinchat();

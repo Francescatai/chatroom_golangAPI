@@ -7,16 +7,16 @@ import (
 )
 
 const (
-	MsgTypeNormal    = iota // 普通 用户消息
-	MsgTypeWelcome          // 当前用户欢迎消息
-	MsgTypeUserEnter        // 用户进入
+	MsgTypeNormal    = iota // 普通 用户訊息
+	MsgTypeWelcome          // 當前用户歡迎訊息
+	MsgTypeUserEnter        // 用户進入
 	MsgTypeUserLeave        // 用户退出
-	MsgTypeError            // 错误消息
+	MsgTypeError            // 错误訊息
 )
 
-// 给用户发送的消息
+// 给用户發送的消息
 type Message struct {
-	// 哪个用户发送的消息
+	// 哪個用户發送的訊息
 	User    *User     `json:"user"`
 	Type    int       `json:"type"`
 	Content string    `json:"content"`
@@ -24,10 +24,10 @@ type Message struct {
 
 	ClientSendTime time.Time `json:"client_send_time"`
 
-	// 消息 @ 了谁
+	// 訊息 @ 了谁
 	Ats []string `json:"ats"`
 
-	// 用户列表不通过 WebSocket 下发
+	// 用户列表不通過WebSocket 下發
 	// Users []*User `json:"users"`
 }
 
@@ -48,7 +48,7 @@ func NewWelcomeMessage(user *User) *Message {
 	return &Message{
 		User:    user,
 		Type:    MsgTypeWelcome,
-		Content: user.NickName + " 您好，欢迎加入聊天室！",
+		Content: user.NickName + " 歡迎加入聊天室！",
 		MsgTime: time.Now(),
 	}
 }
@@ -66,7 +66,7 @@ func NewUserLeaveMessage(user *User) *Message {
 	return &Message{
 		User:    user,
 		Type:    MsgTypeUserLeave,
-		Content: user.NickName + " 离开了聊天室",
+		Content: user.NickName + " 離開了聊天室",
 		MsgTime: time.Now(),
 	}
 }

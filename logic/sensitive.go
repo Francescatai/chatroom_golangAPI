@@ -3,7 +3,7 @@ package logic
 import (
 	"strings"
 
-	"github.com/polaris1119/chatroom/global"
+	"chatsystem/global"
 )
 
 func FilterSensitive(content string) string {

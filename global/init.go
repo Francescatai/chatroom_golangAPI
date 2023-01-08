@@ -21,23 +21,25 @@ func Init() {
 	})
 }
 
-// inferRootDir 推断出项目根目录
+var rootDir string
+
+// inferRootDir 推導出項目 root document
 func inferRootDir() {
-	cwd, err := os.Getwd()
+	cwd, err := os.Getwd() //獲得當前工作目錄
 	if err != nil {
 		panic(err)
 	}
 	var infer func(d string) string
 	infer = func(d string) string {
-		// 这里要确保项目根目录下存在 template 目录
+    // 確認項目根目錄下存在 template
 		if exists(d + "/template") {
 			return d
 		}
 
-		return infer(filepath.Dir(d))
+		return infer(filepath.Dir(d)) //使用遞迴+Dir()往上層目錄查找
 	}
 
-	RootDir = infer(cwd)
+	rootDir = infer(cwd)
 }
 
 func exists(filename string) bool {

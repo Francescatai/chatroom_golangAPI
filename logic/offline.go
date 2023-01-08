@@ -9,10 +9,10 @@ import (
 type offlineProcessor struct {
 	n int
 
-	// 保存所有用户最近的 n 条消息
+	// 保存所有用户最近的 n 條訊息
 	recentRing *ring.Ring
 
-	// 保存某个用户离线消息（一样 n 条）
+	// 保存某個用户離線訊息（一樣n條）
 	userRing map[string]*ring.Ring
 }
 
